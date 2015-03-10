@@ -21,13 +21,32 @@ public class DatLoaderTest {
 	@Before
 	public void setUp() throws Exception {
 		dl = new DatLoader();
+		System.out.println("New DatLoader");
 	}
 
 	@Test
 	public void testLoadDat() {
+		System.out.println("testLoadDat");
 		List<String[]> data = new ArrayList<String[]>();
-		try { data = dl.loadDat(); } catch (IOException e) { System.out.println(e); }
-		System.out.println(data.get(1));
+		System.out.println("ArrayList Made");
+		try { 
+			data = dl.loadDat(); 
+		} catch (IOException e) {
+			System.out.println(e.toString()); 
+		}
+		System.out.println(data.get(1)[0]);
+		System.out.println(data.get(2)[0]);
+		System.out.println(data.get(3)[0]);
+		
+		assertTrue(true);
 	}
-
+	
+//	@Test
+//	public void testLoadDat2(){
+//		try { 
+//			dl.loadDat2(); 
+//		} catch (IOException e) {
+//			System.out.println(e.toString()); 
+//		}
+//	}
 }
