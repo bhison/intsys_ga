@@ -5,9 +5,9 @@ import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class datLoader {
+public class DatLoader {
 
-	public datLoader() {
+	public DatLoader() {
 	}
 
 	//Reading text file http://stackoverflow.com/questions/2788080/reading-a-text-file-in-java
