@@ -34,19 +34,9 @@ public class DatLoaderTest {
 		} catch (IOException e) {
 			System.out.println(e.toString()); 
 		}
-		System.out.println(data.get(1)[0]);
-		System.out.println(data.get(2)[0]);
-		System.out.println(data.get(3)[0]);
+		System.out.println("x: " + data.get(0)[0] + ", y: " + data.get(0)[1]);
+		System.out.println("x: " + data.get(39)[0] + ", y: " + data.get(39)[1]);
 		
 		assertTrue(true);
 	}
-	
-//	@Test
-//	public void testLoadDat2(){
-//		try { 
-//			dl.loadDat2(); 
-//		} catch (IOException e) {
-//			System.out.println(e.toString()); 
-//		}
-//	}
 }
