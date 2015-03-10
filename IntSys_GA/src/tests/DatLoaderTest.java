@@ -1,4 +1,4 @@
-package Build1;
+package tests;
 
 import static org.junit.Assert.*;
 
@@ -9,6 +9,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import Build1.DatLoader;
 
 public class DatLoaderTest {
 
