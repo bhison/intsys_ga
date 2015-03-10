@@ -2,6 +2,10 @@ package build1;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -38,20 +42,25 @@ public class DisplayGraph extends ApplicationFrame {
 		ChartPanel chartPanel = new ChartPanel(lineChart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
 		setContentPane(chartPanel);
+//		chartPanel.setEnabled(true);
+//		this.validate();
+//		this.setEnabled(true);
+//		this.setSize(800, 600);
+//		this.setVisible(true);	
 	}
 
 	private XYSeries getData() {
 		DatLoader loader = new DatLoader();
-		ArrayList<String[]> data = new ArrayList<String[]>();
+		List<String[]> data = new ArrayList<String[]>();
 		try {
-			loader.loadDat();
+			data = loader.loadDat();
 		} catch (IOException e) {
 			System.out.println(e.toString());
 		}
 		return createSeries(data);
 	}
 	
-	private XYSeries createSeries(ArrayList<String[]> data){
+	private XYSeries createSeries(List<String[]> data){
 		XYSeries returnSeries = new XYSeries("TargetCurve");
 		for(String[] entry : data){
 			returnSeries.add(Double.parseDouble(entry[0]), Double.parseDouble(entry[1]));
@@ -61,7 +70,7 @@ public class DisplayGraph extends ApplicationFrame {
 	
 	public static void main(String[] args) {
 		DisplayGraph chart = new DisplayGraph("Intelligent Systems Project", "GA Graph");
-		
+				
 		chart.pack();
 	    RefineryUtilities.centerFrameOnScreen(chart);
 	    chart.setVisible(true);
