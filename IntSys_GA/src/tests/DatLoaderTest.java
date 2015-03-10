@@ -36,8 +36,11 @@ public class DatLoaderTest {
 		} catch (IOException e) {
 			System.out.println(e.toString()); 
 		}
-		System.out.println("x: " + data.get(0)[0] + ", y: " + data.get(0)[1]);
-		System.out.println("x: " + data.get(39)[0] + ", y: " + data.get(39)[1]);
+		for(String[] entry : data){
+			System.out.println(entry[0] + " " + entry[1]);
+		}
+		//System.out.println("x: " + data.get(0)[0] + ", y: " + data.get(0)[1]);
+		//System.out.println("x: " + data.get(39)[0] + ", y: " + data.get(39)[1]);
 		
 		assertTrue(true);
 	}
