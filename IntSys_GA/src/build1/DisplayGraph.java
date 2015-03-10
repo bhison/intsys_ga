@@ -1,4 +1,4 @@
-package Build1;
+package build1;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,6 +11,7 @@ import org.jfree.chart.renderer.xy.XYSplineRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
+import org.jfree.ui.RefineryUtilities;
 
 //To use: chart.getXYPlot().setRenderer(new XYSplineRenderer());
 //Double to binary: http://stackoverflow.com/questions/6359847/convert-double-to-binary-representation
@@ -56,5 +57,15 @@ public class DisplayGraph extends ApplicationFrame {
 			returnSeries.add(Double.parseDouble(entry[0]), Double.parseDouble(entry[1]));
 		}
 		return returnSeries;
+	}
+	
+	public static void main(String[] args) {
+		DisplayGraph chart = new DisplayGraph("Intelligent Systems Project", "GA Graph");
+		
+		chart.pack();
+	    RefineryUtilities.centerFrameOnScreen(chart);
+	    chart.setVisible(true);
+	    
+	    System.out.println("All done...");
 	}
 }

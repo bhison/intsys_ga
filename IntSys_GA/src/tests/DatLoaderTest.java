@@ -10,7 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import Build1.DatLoader;
+import build1.DatLoader;
 
 public class DatLoaderTest {
 
