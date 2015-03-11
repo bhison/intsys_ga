@@ -1,10 +1,9 @@
 package build1;
-
+//This may end up being useful: new ArrayList<Element>(Arrays.asList(array))
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jfree.data.xy.XYSeries;
@@ -12,12 +11,13 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class DatLoader {
 	
-	private List<String[]> dataList;
+	private Double[][] dataList;
+	private Double[] xValues;
+	private Double[] yValues;
 	private XYSeries xySeries;
 	private XYSeriesCollection xySeriesCollection;
-	private ArrayList<Integer> xValues;
-	private ArrayList<Integer> yValues;
-	
+	private int dataSize;
+
 	public DatLoader() {
 		List<String> datFile;
 		try {
@@ -28,29 +28,35 @@ public class DatLoader {
 			System.out.println("IOException: " + e.toString());
 			return;
 		}
-		dataList = new ArrayList<String[]>();
-		xValues = new ArrayList<Integer>();
-		yValues = new ArrayList<Integer>();
+		
+		dataSize = datFile.size();
+		
+		dataList = new Double[dataSize][2];
+		xValues = new Double[dataSize];
+		yValues = new Double[dataSize];
+		int i = 0;
 		for (String line : datFile) {
 		    String[] array = line.split("\\s+");
-		    dataList.add(array);
-		    xValues.add(Integer.parseInt(array[0],10));
-		    yValues.add(Integer.parseInt(array[1],10));
+		    xValues[i] = Double.parseDouble(array[0]);
+		    yValues[i] = Double.parseDouble(array[1]);
+		    dataList[i] = new Double[]{xValues[i], yValues[i]};
+		    System.out.println(i);
+		    i++;
 		}
+		
 		xySeries = createSeries(dataList);
-		xySeriesCollection = new XYSeriesCollection();
-		xySeriesCollection.addSeries(xySeries);
+		xySeriesCollection = new XYSeriesCollection(xySeries);
 	}
 	
-	private XYSeries createSeries(List<String[]> data){
+	private XYSeries createSeries(Double[][] data){
 		XYSeries returnSeries = new XYSeries("TargetCurve");
-		for(String[] entry : data){
-			returnSeries.add(Double.parseDouble(entry[0]), Double.parseDouble(entry[1]));
+		for(Double[] entry : data){
+			returnSeries.add(entry[0], entry[1]);
 		}
 		return returnSeries;
 	}
 	
-	public List<String[]> getDataList(){
+	public Double[][] getDataList(){
 		return dataList;
 	}
 	
@@ -62,13 +68,16 @@ public class DatLoader {
 		return xySeriesCollection;
 	}
 	
-	public ArrayList<Integer> getXValues(){
+	public Double[] getXValues(){
 		return xValues;
 	}
 	
-	public ArrayList<Integer> getYValues(){
+	public Double[] getYValues(){
 		return yValues;
 	}
 	
+	public int getDataSize(){
+		return dataSize;
+	}
 	
 }

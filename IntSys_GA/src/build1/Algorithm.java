@@ -1,6 +1,7 @@
 package build1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -10,6 +11,8 @@ public class Algorithm {
 
 	private DatLoader datLoader;
 	private Random random;
+	
+	private int dataSize;
 	
 	private Poly[] bestSet;
 	private double bestFitness;
@@ -63,9 +66,14 @@ public class Algorithm {
 		return new Poly(r);
 	}
 	
+	/**
+	 * Input coefficients, get returned a list of f(x) for sample x values
+	 * @param coefficients
+	 * @return
+	 */
 	private Double[] runCheck(Poly[] coefficients){
-		ArrayList<Integer> xValues = datLoader.getXValues();
-		Double[] results = new Double[xValues.size()];
+		Double[] results = new Double[dataSize];
+		ArrayList<Integer> xValues = new ArrayList<Integer>(Arrays.asList(datLoader.getXValues()));
 		Iterator<Integer> it = xValues.iterator();
 		int i = 0;
 		while(it.hasNext()){
