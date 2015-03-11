@@ -1,19 +1,26 @@
 package build1;
 
-//import org.jfree.ui.RefineryUtilities;
+import org.jfree.ui.RefineryUtilities;
 
 public class Main {
+	DatLoader datLoader;
+	LineChart lineChart;
 
 	public Main() {
-		// TODO Auto-generated constructor stub
+		datLoader = new DatLoader();
+		lineChart = new LineChart("Intelligent Systems Project", "GA Graph", datLoader.getXYSeriesCollection());
+		
+		lineChart.pack();
+	    RefineryUtilities.centerFrameOnScreen(lineChart);
+	    lineChart.setVisible(true);
+	    
+	    System.out.println("All done...");
+		
 	}
 
-//	public static void main(String[] args) {
-//		DisplayGraph chart = new DisplayGraph("Intelligent Systems Project", "GA Graph");
-//		chart.pack();
-//	    RefineryUtilities.centerFrameOnScreen(chart);
-//	    chart.setVisible(true);
-//	    System.out.println("All done...");
-//	}
-
+	public static void main(String[] args) {
+		new Main();
+	}
 }
+
+
