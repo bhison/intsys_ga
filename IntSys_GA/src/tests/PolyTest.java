@@ -20,14 +20,18 @@ public class PolyTest {
 	}
 
 	@Test
-	public void testEncode() {
-		Poly x = new Poly(123);
-		Poly y = new Poly("123");
-		Poly z = new Poly("01111011");
-		assertEquals(x.s(), "123");
-		assertEquals(y.b(), "01111011");
-		assertEquals(z.i(), (int)123);
-		assertEquals(new Poly(8).b(), "00001000");
+	public void testEncode() {		
+		Poly a = new Poly(-128);
+		System.out.println(a.b());
+		System.out.println(a.s());
+		System.out.println(a.i());
+		a = new Poly("1000000010000000");
+		System.out.println(a.b());
+		System.out.println(a.s());
+		System.out.println(a.i());
+		a = new Poly("-128");
+		System.out.println(a.b());
+		System.out.println(a.s());
+		System.out.println(a.i());
 	}
-
 }

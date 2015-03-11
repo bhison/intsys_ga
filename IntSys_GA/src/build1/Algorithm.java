@@ -11,15 +11,11 @@ public class Algorithm {
 
 	private DatLoader datLoader;
 	private Random random;
-	
 	private int dataSize;
 	private Double[] targetYValues;
-	
 	private Poly[] bestSet;
-	private double bestFitness;
-	
+	private double bestFitness; //The lower the better, 0 is success
 	private boolean newBest;
-	
 	private static final int RANDOM_LIMIT = 255;
 	private static final double MUTATION_RATE = 0.7;
 	private static final double CROSSOVER_RATE = 0.5;
@@ -50,9 +46,9 @@ public class Algorithm {
 		
 		while(keepGoing){
 			cycles ++;
-			Double[] resultXValues = runCheck(activeCoefSet);
-			Double fitness = getFitness(resultXValues);
-			if(fitness < bestFitness) cyclesLeft --;
+			Double[] resultYValues = runCheck(activeCoefSet);
+			Double fitness = getFitness(resultYValues);
+			if(fitness > bestFitness) cyclesLeft --; //If higher as lower number = better fitness
 			else {
 				cyclesLeft = IMPROVEMENT_WAIT;
 				updateBest(activeCoefSet,fitness);
@@ -64,9 +60,9 @@ public class Algorithm {
 	}
 	
 	/**
-	 * Input coefficients, get returned a list of f(x) for sample x values
+	 * Input coefficients, get returned a list of y values for sample x values
 	 * @param coefficients
-	 * @return
+	 * @return the y values array
 	 */
 	private Double[] runCheck(Poly[] coefficients){
 		Double[] results = new Double[dataSize];
@@ -74,14 +70,14 @@ public class Algorithm {
 		Iterator<Double> it = xValues.iterator();
 		int i = 0;
 		while(it.hasNext()){
-			double a, b, c, d, e, f, x;
+			double x, a, b, c, d, e, f;
 			x = it.next();
 			a = coefficients[0].i();
 			b = coefficients[1].i() * x;
-			c = Math.pow(coefficients[2].i() * x, 2);
-			d = Math.pow(coefficients[3].i() * x, 3);
-			e = Math.pow(coefficients[4].i() * x, 4);
-			f = Math.pow(coefficients[5].i() * x, 5);
+			c = coefficients[2].i() * Math.pow(x, 2);
+			d = coefficients[3].i() * Math.pow(x, 3);
+			e = coefficients[4].i() * Math.pow(x, 4);
+			f = coefficients[5].i() * Math.pow(x, 5);
 			results[i] = (a+b+c+d+e+f);
 		}
 		it.remove();
@@ -90,12 +86,15 @@ public class Algorithm {
 	
 	/**
 	 * Get normalised total variance from target values
-	 * @param resultXList
+	 * @param resultYValues
 	 * @return fitnessValue
 	 */
-	private double getFitness(Double[] resultXList){
-		
-		return 0.0d;
+	private double getFitness(Double[] resultYValues){
+		double result = 0;
+		for(int i = 0; i < dataSize; i++){
+			result += Math.sqrt(Math.pow(resultYValues[i] - targetYValues[i], 2));
+		}
+		return result;
 	}
 	
 	private Poly[] runCrossover(Poly[] activeSet){
