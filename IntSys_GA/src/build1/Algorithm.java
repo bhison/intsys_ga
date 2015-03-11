@@ -13,10 +13,10 @@ public class Algorithm {
 	private Random random;
 	
 	private int dataSize;
+	private Double[] targetYValues;
 	
 	private Poly[] bestSet;
 	private double bestFitness;
-	private Double[] bestSeries;
 	
 	private boolean newBest;
 	
@@ -28,7 +28,9 @@ public class Algorithm {
 	
 	public Algorithm(DatLoader datLoader) {
 		this.datLoader = datLoader;
-		random = new Random();
+		random = new Random();		
+		dataSize = datLoader.getDataSize();
+		targetYValues = datLoader.getYValues();
 		bestFitness = 0;
 		newBest = false;
 		algoLoop();
@@ -53,17 +55,12 @@ public class Algorithm {
 			if(fitness < bestFitness) cyclesLeft --;
 			else {
 				cyclesLeft = IMPROVEMENT_WAIT;
-				updateBest(activeCoefSet,fitness,resultXValues);
+				updateBest(activeCoefSet,fitness);
 			}
 			updateChart(cycles);
 			keepGoing = continueLoop(cyclesLeft);
 		}
 		updateChart(cycles);
-	}
-	
-	private Poly randPoly(){
-		int r = random.nextInt(RANDOM_LIMIT);
-		return new Poly(r);
 	}
 	
 	/**
@@ -91,6 +88,11 @@ public class Algorithm {
 		return results;
 	}
 	
+	/**
+	 * Get normalised total variance from target values
+	 * @param resultXList
+	 * @return fitnessValue
+	 */
 	private double getFitness(Double[] resultXList){
 		
 		return 0.0d;
@@ -104,10 +106,18 @@ public class Algorithm {
 		return new Poly[]{};		
 	}
 	
-	private void updateBest(Poly[] newBestSet, Double newBestFitness, Double[] newBestSeries) {
+	/**
+	 * Generate Poly with random value between 0 and RANDOM_LIMIT
+	 * @return
+	 */
+	private Poly randPoly(){
+		int r = random.nextInt(RANDOM_LIMIT);
+		return new Poly(r);
+	}
+	
+	private void updateBest(Poly[] newBestSet, Double newBestFitness) {
 		bestSet = newBestSet;
 		bestFitness = newBestFitness;
-		bestSeries = newBestSeries;
 		newBest = true;
 		System.out.println("New bestFitness = " + newBestFitness);
 	}
