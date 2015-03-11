@@ -29,19 +29,11 @@ public class DatLoaderTest {
 	@Test
 	public void testLoadDat() {
 		System.out.println("testLoadDat");
-		List<String[]> data = new ArrayList<String[]>();
+		List<String[]> data = dl.getDataList();
 		System.out.println("ArrayList Made");
-		try { 
-			data = dl.loadDat(); 
-		} catch (IOException e) {
-			System.out.println(e.toString()); 
-		}
 		for(String[] entry : data){
 			System.out.println(entry[0] + " " + entry[1]);
 		}
-		//System.out.println("x: " + data.get(0)[0] + ", y: " + data.get(0)[1]);
-		//System.out.println("x: " + data.get(39)[0] + ", y: " + data.get(39)[1]);
-		
 		assertTrue(true);
 	}
 }

@@ -15,6 +15,8 @@ public class DatLoader {
 	private List<String[]> dataList;
 	private XYSeries xySeries;
 	private XYSeriesCollection xySeriesCollection;
+	private ArrayList<Integer> xValues;
+	private ArrayList<Integer> yValues;
 	
 	public DatLoader() {
 		List<String> datFile;
@@ -27,9 +29,13 @@ public class DatLoader {
 			return;
 		}
 		dataList = new ArrayList<String[]>();
+		xValues = new ArrayList<Integer>();
+		yValues = new ArrayList<Integer>();
 		for (String line : datFile) {
 		    String[] array = line.split("\\s+");
 		    dataList.add(array);
+		    xValues.add(Integer.parseInt(array[0]));
+		    yValues.add(Integer.parseInt(array[1]));
 		}
 		xySeries = createSeries(dataList);
 		xySeriesCollection = new XYSeriesCollection();
@@ -44,12 +50,24 @@ public class DatLoader {
 		return returnSeries;
 	}
 	
+	public List<String[]> getDataList(){
+		return dataList;
+	}
+	
 	public XYSeries getXYSeries(){
 		return xySeries;
 	}
 	
 	public XYSeriesCollection getXYSeriesCollection(){
 		return xySeriesCollection;
+	}
+	
+	public ArrayList<Integer> getXValues(){
+		return xValues;
+	}
+	
+	public ArrayList<Integer> getYValues(){
+		return yValues;
 	}
 	
 	
