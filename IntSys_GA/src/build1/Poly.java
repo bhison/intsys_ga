@@ -48,5 +48,4 @@ public class Poly {
 	public int i(){
 		return n;
 	}
-
 }

@@ -34,8 +34,8 @@ public class DatLoader {
 		for (String line : datFile) {
 		    String[] array = line.split("\\s+");
 		    dataList.add(array);
-		    xValues.add(Integer.parseInt(array[0]));
-		    yValues.add(Integer.parseInt(array[1]));
+		    xValues.add(Integer.parseInt(array[0],10));
+		    yValues.add(Integer.parseInt(array[1],10));
 		}
 		xySeries = createSeries(dataList);
 		xySeriesCollection = new XYSeriesCollection();
