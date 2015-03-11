@@ -40,7 +40,6 @@ public class DatLoader {
 		    xValues[i] = Double.parseDouble(array[0]);
 		    yValues[i] = Double.parseDouble(array[1]);
 		    dataList[i] = new Double[]{xValues[i], yValues[i]};
-		    System.out.println(i);
 		    i++;
 		}
 		

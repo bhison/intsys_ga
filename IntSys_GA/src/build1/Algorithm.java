@@ -73,8 +73,8 @@ public class Algorithm {
 	 */
 	private Double[] runCheck(Poly[] coefficients){
 		Double[] results = new Double[dataSize];
-		ArrayList<Integer> xValues = new ArrayList<Integer>(Arrays.asList(datLoader.getXValues()));
-		Iterator<Integer> it = xValues.iterator();
+		ArrayList<Double> xValues = new ArrayList<Double>(Arrays.asList(datLoader.getXValues()));
+		Iterator<Double> it = xValues.iterator();
 		int i = 0;
 		while(it.hasNext()){
 			double a, b, c, d, e, f, x;

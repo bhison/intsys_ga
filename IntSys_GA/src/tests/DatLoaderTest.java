@@ -29,10 +29,10 @@ public class DatLoaderTest {
 	@Test
 	public void testLoadDat() {
 		System.out.println("testLoadDat");
-		List<String[]> data = dl.getDataList();
+		Double[][] data = dl.getDataList();
 		System.out.println("ArrayList Made");
-		for(String[] entry : data){
-			System.out.println(entry[0] + " " + entry[1]);
+		for(Double[] entry : data){
+			System.out.println("LDT:" + entry[0] + " " + entry[1]);
 		}
 		assertTrue(true);
 	}
