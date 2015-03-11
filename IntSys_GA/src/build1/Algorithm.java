@@ -16,43 +16,48 @@ public class Algorithm {
 	private Poly[] bestSet;
 	private double bestFitness; //The lower the better, 0 is success
 	private boolean newBest;
-	private static final int RANDOM_LIMIT = 255;
+	private int improvements;
+	private long timeOfLastUpdate;
+	private static final int RANDOM_RANGE = 65536;	
+	private static final int RANDOM_LIMIT = 32768;
 	private static final double MUTATION_RATE = 0.7;
 	private static final double CROSSOVER_RATE = 0.5;
-	private static final int IMPROVEMENT_WAIT = 100;
+	private static final int IMPROVEMENT_WAIT = 100000;
 	private static final int CHART_UPDATE_FREQUENCY = 25;
+	private static final double STARTING_FITNESS = 9E50;
 	
 	public Algorithm(DatLoader datLoader) {
 		this.datLoader = datLoader;
 		random = new Random();		
 		dataSize = datLoader.getDataSize();
 		targetYValues = datLoader.getYValues();
-		bestFitness = 0;
+		bestFitness = STARTING_FITNESS;
 		newBest = false;
+		improvements = 0;
 		algoLoop();
 	}
 	
 	/**
 	 * The main algorithm loop
 	 */
-	private void algoLoop() {
+	private synchronized void algoLoop() {
 		//Setup variables
-		Poly[] activeCoefSet = new Poly[] {
-				randPoly(), randPoly(), randPoly(), randPoly(), randPoly()
-			};
+		Poly[] activeCoefSet = randPoly(6);
 		boolean keepGoing = true;
 		int cycles = 0;
 		int cyclesLeft = IMPROVEMENT_WAIT;
 		
 		while(keepGoing){
 			cycles ++;
+			if(cycles % 10000 == 0) System.out.println("////////////////////////Cycle " + cycles + ", " + improvements + " improvements");
 			Double[] resultYValues = runCheck(activeCoefSet);
 			Double fitness = getFitness(resultYValues);
-			if(fitness > bestFitness) cyclesLeft --; //If higher as lower number = better fitness
+			if(fitness > bestFitness) { /*cyclesLeft --;*/ } //If higher as lower number = better fitness
 			else {
 				cyclesLeft = IMPROVEMENT_WAIT;
 				updateBest(activeCoefSet,fitness);
 			}
+			activeCoefSet = randPoly(6);
 			updateChart(cycles);
 			keepGoing = continueLoop(cyclesLeft);
 		}
@@ -64,7 +69,7 @@ public class Algorithm {
 	 * @param coefficients
 	 * @return the y values array
 	 */
-	private Double[] runCheck(Poly[] coefficients){
+	private synchronized Double[] runCheck(Poly[] coefficients){
 		Double[] results = new Double[dataSize];
 		ArrayList<Double> xValues = new ArrayList<Double>(Arrays.asList(datLoader.getXValues()));
 		Iterator<Double> it = xValues.iterator();
@@ -79,6 +84,7 @@ public class Algorithm {
 			e = coefficients[4].i() * Math.pow(x, 4);
 			f = coefficients[5].i() * Math.pow(x, 5);
 			results[i] = (a+b+c+d+e+f);
+			i++;
 		}
 		it.remove();
 		return results;
@@ -110,15 +116,41 @@ public class Algorithm {
 	 * @return
 	 */
 	private Poly randPoly(){
-		int r = random.nextInt(RANDOM_LIMIT);
+		int r = random.nextInt(RANDOM_RANGE) - RANDOM_LIMIT;
 		return new Poly(r);
 	}
+	
+	/**
+	 * Generate set of Polys with random value between 0 and RANDOM_LIMIT
+	 * @param n The size of the set
+	 * @return random poly set
+	 */
+	private Poly[] randPoly(int n){
+		Poly[] returnSet = new Poly[n];
+		for(int i = 0; i < n; i++){
+			returnSet[i] = randPoly();
+		}
+		return returnSet;
+	}
+	
 	
 	private void updateBest(Poly[] newBestSet, Double newBestFitness) {
 		bestSet = newBestSet;
 		bestFitness = newBestFitness;
+		improvements ++;
 		newBest = true;
-		System.out.println("New bestFitness = " + newBestFitness);
+		long wait = System.currentTimeMillis() - timeOfLastUpdate;
+		timeOfLastUpdate = System.currentTimeMillis();
+		System.out.println("******************************************************");
+		System.out.println("******************************************************");
+		System.out.println("******************************************************");
+		System.out.println("******************************************************");
+		System.out.println("=====New bestFitness = " + newBestFitness + "======");
+		System.out.println("============Improvement took " + wait/1000 + "seconds===========");
+		System.out.println("******************************************************");
+		System.out.println("******************************************************");
+		System.out.println("******************************************************");
+		System.out.println("******************************************************");
 	}
 	
 	private void updateChart(int cycles){
