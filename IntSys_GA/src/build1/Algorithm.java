@@ -18,13 +18,21 @@ public class Algorithm {
 	private boolean newBest;
 	private int improvements;
 	private long timeOfLastUpdate;
+	
+	private static final int POLY_BITS = 16;
 	private static final int RANDOM_RANGE = 65536;	
 	private static final int RANDOM_LIMIT = 32768;
-	private static final double MUTATION_RATE = 0.7;
-	private static final double CROSSOVER_RATE = 0.5;
 	private static final int IMPROVEMENT_WAIT = 100000;
-	private static final int CHART_UPDATE_FREQUENCY = 25;
+	private static final int CHART_UPDATE_FREQUENCY = 10000;
 	private static final double STARTING_FITNESS = 9E50;
+	
+	private static final double BOTH_RATE = 0.2;
+	private static final double CROSSOVER_RATE = 0.5;
+	private static final double MUTATION_RATE = 0.7;
+	
+	private static final double CHARACTER_MUTATION_CHANCE = 0.15;
+	private static final int TOURNAMENT_SIZE = 10;
+	private static final int TOURNAMENT_WINNERS = 2;
 	
 	public Algorithm(DatLoader datLoader) {
 		this.datLoader = datLoader;
@@ -35,6 +43,17 @@ public class Algorithm {
 		newBest = false;
 		improvements = 0;
 		algoLoop();
+	}
+	
+	//Test constructor - doesn't run the algorithm
+	public Algorithm(Boolean isTest) {
+		datLoader = new DatLoader();
+		random = new Random();		
+		dataSize = datLoader.getDataSize();
+		targetYValues = datLoader.getYValues();
+		bestFitness = STARTING_FITNESS;
+		newBest = false;
+		improvements = 0;
 	}
 	
 	/**
@@ -49,7 +68,7 @@ public class Algorithm {
 		
 		while(keepGoing){
 			cycles ++;
-			if(cycles % 10000 == 0) System.out.println("////////////////////////Cycle " + cycles + ", " + improvements + " improvements");
+			if(cycles % 10000 == 0) System.out.println("Cycle " + cycles + ", " + improvements + " improvements");
 			Double[] resultYValues = runCheck(activeCoefSet);
 			Double fitness = getFitness(resultYValues);
 			if(fitness > bestFitness) { /*cyclesLeft --;*/ } //If higher as lower number = better fitness
@@ -142,14 +161,8 @@ public class Algorithm {
 		long wait = System.currentTimeMillis() - timeOfLastUpdate;
 		timeOfLastUpdate = System.currentTimeMillis();
 		System.out.println("******************************************************");
-		System.out.println("******************************************************");
-		System.out.println("******************************************************");
-		System.out.println("******************************************************");
 		System.out.println("=====New bestFitness = " + newBestFitness + "======");
 		System.out.println("============Improvement took " + wait/1000 + "seconds===========");
-		System.out.println("******************************************************");
-		System.out.println("******************************************************");
-		System.out.println("******************************************************");
 		System.out.println("******************************************************");
 	}
 	
@@ -170,6 +183,41 @@ public class Algorithm {
 			return false;
 		}
 		else return true;
+	}
+	
+	public Poly[] mutate(Poly[] candidates){
+		StringBuilder chromosome = new StringBuilder(polyArrayToChromosone(candidates));
+		for(int i = 0; i < chromosome.length(); i++) {
+			double diceRoll = random.nextDouble();
+			System.out.println("Char at " + i + ", MC:" + CHARACTER_MUTATION_CHANCE + 
+					" DR:" + diceRoll);
+			if(diceRoll < CHARACTER_MUTATION_CHANCE) {
+				char c = chromosome.charAt(i) == '0' ? '1' : '0';
+				chromosome.setCharAt(i, c);
+			}
+		}
+		return chromosomeToPolyArray(chromosome.toString());
+	}
+	
+	private String polyArrayToChromosone(Poly[] array) {
+		StringBuilder chromosome = new StringBuilder();
+		for(Poly p : array){
+			chromosome.append(p.b());
+		}
+		return chromosome.toString();
+	}
+	
+	private Poly[] chromosomeToPolyArray(String chromosome){
+		int size = chromosome.length() / POLY_BITS;
+		Poly[] returnArray = new Poly[size];
+		for(int i = 0; i < size; i++) {
+			returnArray[i] = new Poly(chromosome.substring(i * POLY_BITS, ((i + 1) * POLY_BITS)));
+		}
+		return returnArray;
+	}
+	
+	public Poly[][] crossOver(Poly[][] pair) {
+		
 	}
 
 }
