@@ -1,18 +1,17 @@
 package build1;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.NumberAxis;
+import org.jfree.chart.axis.NumberTickUnit;
+import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYSplineRenderer;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.ui.ApplicationFrame;
-import org.jfree.ui.RefineryUtilities;
 
 //To use: chart.getXYPlot().setRenderer(new XYSplineRenderer());
 //Double to binary: http://stackoverflow.com/questions/6359847/convert-double-to-binary-representation
@@ -20,13 +19,21 @@ import org.jfree.ui.RefineryUtilities;
 public class LineChart extends ApplicationFrame {
 
 	JFreeChart lineChart;
+	XYPlot plot;
+	XYSeries guess;
+	XYSeriesCollection dataset;
+	String chartTitle;
+	ChartPanel chartPanel;
 	
 	public LineChart(String applicationTitle, String chartTitle, XYSeriesCollection dataset) {
 		super(applicationTitle);
-		buildChart(chartTitle, dataset);
+		this.dataset = dataset;
+		guess = new XYSeries("Guess");
+		dataset.addSeries(guess);
+		buildChart(chartTitle);
 	}
 	
-	private void buildChart(String chartTitle, XYSeriesCollection dataset)
+	private void buildChart(String chartTitle)
 	{
 		lineChart = ChartFactory.createXYLineChart(
 				chartTitle,
@@ -38,10 +45,21 @@ public class LineChart extends ApplicationFrame {
 				true,
 				false
 				);
-		lineChart.getXYPlot().setRenderer(new XYSplineRenderer());
+		plot = lineChart.getXYPlot();
+		plot.setRenderer(new XYSplineRenderer());
+		NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
+		ValueAxis yAxis = plot.getRangeAxis();
+		xAxis.setRange(-30.00, 60.00);;
+		xAxis.setTickUnit(new NumberTickUnit(10));
+		yAxis.setRange(-2e+06, 1.5e+06);
 
-		ChartPanel chartPanel = new ChartPanel(lineChart);
+		chartPanel = new ChartPanel(lineChart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(800, 600));
-		setContentPane(chartPanel);	
+		setContentPane(chartPanel);
+	}
+	
+	public void updatePlot(XYSeries series){
+		//DataItem item = new DataItem();
+		//series,
 	}
 }

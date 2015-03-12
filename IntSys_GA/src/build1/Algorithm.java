@@ -24,6 +24,8 @@ public class Algorithm {
 	private double cycles;
 	private long startTime;
 	private Poly[][] population;
+	private double[] populationFitness;
+	private int[] populationRank;
 	private Poly[][] nextGeneration;
 	
 	private static final int POLY_BITS = 16;
@@ -42,6 +44,7 @@ public class Algorithm {
 	private static final double POLY_CROSSOVER_CHANCE = 0.5;	
 	private static final int TOURNAMENT_SIZE = 10;
 	private static final int TOURNAMENT_WINNERS = 2;
+	private static final int POPULATION_SIZE = 100;
 	
 	public Algorithm(DatLoader datLoader) {
 		this.datLoader = datLoader;
@@ -56,16 +59,16 @@ public class Algorithm {
 		algoLoop();
 	}
 	
-	//Test constructor - doesn't run the algorithm
-	public Algorithm(Boolean isTest) {
-		datLoader = new DatLoader();
-		random = new Random();		
-		dataSize = datLoader.getDataSize();
-		targetYValues = datLoader.getYValues();
-		bestFitness = STARTING_FITNESS;
-		newBest = false;
-		improvements = 0;
-	}
+//	//Test constructor - doesn't run the algorithm
+//	public Algorithm(Boolean isTest) {
+//		datLoader = new DatLoader();
+//		random = new Random();		
+//		dataSize = datLoader.getDataSize();
+//		targetYValues = datLoader.getYValues();
+//		bestFitness = STARTING_FITNESS;
+//		newBest = false;
+//		improvements = 0;
+//	}
 	
 	/**
 	 * The main algorithm loop
@@ -73,6 +76,8 @@ public class Algorithm {
 	private synchronized void algoLoop() {
 		//Setup variables
 		Poly[][] champions = new Poly[0][0];
+		population = randPolySet(100);
+		//analysePopulation(); //For new version
 		boolean keepGoing = true;
 		cycles = 0;
 		double cyclesLeft = IMPROVEMENT_WAIT; //TODO have this decremented, reset somewhere
@@ -196,6 +201,15 @@ public class Algorithm {
 		if(result < bestFitness) updateBest(coefficients, result);
 		if(doUpdates) System.out.println("Fitness calculation: " + result);
 		return result;
+	}
+	
+	/** Version for when you don't want to run checks separately
+	 * 
+	 * @return
+	 */
+	private double getFitness(Poly[] coefficients){
+		Double[] resultYValues = runCheck(coefficients);
+		return getFitness(resultYValues, coefficients);
 	}
 	
 	/**
@@ -331,5 +345,20 @@ public class Algorithm {
 				(System.currentTimeMillis() - timeOfLastUpdate) / 1000 +
 				" seconds ago");
 		doUpdates = false;
+	}
+	
+	private void analysePopulation() {
+		//Calculate fitness
+		for(int i = 0; i < population.length; i++){
+			populationFitness[i] = getFitness(population[i]);
+		}
+		for(int i = 0; i < population.length; i++){
+			int rank = population.length-1;
+			double f = populationFitness[i];
+			for(int j = 0; j < population.length; j++){
+				if(f < populationFitness[j]) rank --;
+			}
+			populationRank[rank] = i;
+		}
 	}
 }

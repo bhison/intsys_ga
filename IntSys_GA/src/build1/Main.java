@@ -17,7 +17,7 @@ public class Main {
 	}
 	
 	private void runAlgo(){
-		new Algorithm(datLoader);
+		new Algorithm2(datLoader, lineChart);
 	}
 
 	public static void main(String[] args) {
