@@ -32,7 +32,7 @@ public class AlgorithmTest {
 
 	
 	public void testMutate() {		
-		Poly[] changedArray = algo.mutate(polyArray);
+		Poly[] changedArray = algo.doMutate(polyArray);
 		for(Poly p : changedArray){
 			System.out.println(p.b());
 		}
@@ -42,7 +42,7 @@ public class AlgorithmTest {
 	public void testCrossover() {
 		System.out.println("BEFORE:");
 		printArrayArray();
-		polyArrayArray = algo.crossOver(polyArrayArray);
+		polyArrayArray = algo.doCrossover(polyArrayArray[0], polyArrayArray[1]);
 		System.out.println("AFTER");
 		printArrayArray();
 	}
@@ -59,5 +59,42 @@ public class AlgorithmTest {
 			j = 0;
 		}
 	}
+	
+	@Test
+	public void testArrays(){
+		Poly[][] p = new Poly[1][2];
+		p[0][1] = new Poly(5);
+	}
 
 }
+
+///*
+//	/**
+//	 * The main algorithm loop
+//	 */
+//	private synchronized void algoLoop() {
+//		//Setup variables
+//		Poly[][] competitors = new Poly[6][5];
+//		Poly[] activeCoefSet = randPoly(6);
+//		boolean keepGoing = true;
+//		int cycles = 0;
+//		double cyclesLeft = IMPROVEMENT_WAIT;
+//		
+//		while(keepGoing){
+//			cycles ++;
+//			if(cycles % 10000 == 0) System.out.println("Cycle " + cycles + ", " + improvements + " improvements");
+//			Double[] resultYValues = runCheck(activeCoefSet);
+//			Double fitness = getFitness(resultYValues);
+//			if(fitness > bestFitness) { cyclesLeft --; } //If higher as lower number = better fitness
+//			else {
+//				cyclesLeft = IMPROVEMENT_WAIT;
+//				updateBest(activeCoefSet,fitness);
+//			}
+//			activeCoefSet = randPoly(6);
+//			updateChart(cycles);
+//			keepGoing = continueLoop(cyclesLeft);
+//		}
+//		updateChart(cycles);
+//	}
+//	
+
