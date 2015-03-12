@@ -7,6 +7,8 @@ import java.util.Random;
 
 import org.jfree.data.xy.XYSeries;
 
+//Hall of fame, top 10 solutions to be added back in randomly
+
 public class Algorithm {
 
 	private DatLoader datLoader;
@@ -31,6 +33,7 @@ public class Algorithm {
 	private static final double MUTATION_RATE = 0.7;
 	
 	private static final double CHARACTER_MUTATION_CHANCE = 0.15;
+	private static final double POLY_CROSSOVER_CHANCE = 0.4;	
 	private static final int TOURNAMENT_SIZE = 10;
 	private static final int TOURNAMENT_WINNERS = 2;
 	
@@ -134,7 +137,7 @@ public class Algorithm {
 	 * Generate Poly with random value between 0 and RANDOM_LIMIT
 	 * @return
 	 */
-	private Poly randPoly(){
+	public Poly randPoly(){
 		int r = random.nextInt(RANDOM_RANGE) - RANDOM_LIMIT;
 		return new Poly(r);
 	}
@@ -144,7 +147,7 @@ public class Algorithm {
 	 * @param n The size of the set
 	 * @return random poly set
 	 */
-	private Poly[] randPoly(int n){
+	public Poly[] randPoly(int n){
 		Poly[] returnSet = new Poly[n];
 		for(int i = 0; i < n; i++){
 			returnSet[i] = randPoly();
@@ -217,7 +220,20 @@ public class Algorithm {
 	}
 	
 	public Poly[][] crossOver(Poly[][] pair) {
-		
+		Poly[] set1 = pair[0];
+		Poly[] set2 = pair[1];
+		Poly bench;
+		int crossed = 0;
+		for(int i = 0; i < set1.length; i++){
+			if(random.nextDouble() < POLY_CROSSOVER_CHANCE) {
+				bench = set1[i];
+				set1[i] = set2[i];
+				set2[i] = bench;
+				crossed ++;
+			}
+		}
+		System.out.println(crossed + " elements crossed over.");
+		return new Poly[][]{set1, set2};
 	}
 
 }
